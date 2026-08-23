@@ -1,9 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "forwardnotes",
+  "name": "design-inspo",
   "compatibility_date": "2026-08-23",
-  "assets": {
-    "directory": "./site",
-    "not_found_handling": "404-page"
-  }
+  "pages_build_output_dir": "./site"
 }
