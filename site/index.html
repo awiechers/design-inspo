@@ -3,164 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Design Inspo</title>
-<style>
-  :root {
-    --bg: #0e0e11; --card: #1a1a1f; --border: #2a2a32;
-    --text: #e8e8ec; --muted: #8b8b96; --accent: #7c6cf0;
-  }
-  * { box-sizing: border-box; margin: 0; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, sans-serif; }
-  header { padding: 20px 28px 12px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; position: sticky; top: 0; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
-  h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-  #search { flex: 1; min-width: 200px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 9px 14px; color: var(--text); font-size: 14px; outline: none; }
-  #search:focus { border-color: var(--accent); }
-  .count { color: var(--muted); font-size: 13px; }
-  #tags { padding: 10px 28px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .tag-chip { background: var(--card); border: 1px solid var(--border); color: var(--muted); border-radius: 99px; padding: 5px 13px; font-size: 13px; cursor: pointer; user-select: none; }
-  .tag-chip:hover { border-color: var(--accent); color: var(--text); }
-  .tag-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-  #grid { columns: 4 260px; column-gap: 16px; padding: 16px 28px 60px; }
-  .card { break-inside: avoid; background: var(--card); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 16px; overflow: hidden; transition: border-color .15s; }
-  .card:hover { border-color: #4a4a58; }
-  .card img { width: 100%; display: block; cursor: zoom-in; }
-  .card .body { padding: 12px 14px; }
-  .card .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .card .handle { color: var(--accent); font-size: 13px; font-weight: 600; text-decoration: none; }
-  .card .date { color: var(--muted); font-size: 12px; }
-  .card .text { font-size: 13px; color: #c9c9d2; margin-top: 6px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .card .item-tags { margin-top: 8px; display: flex; gap: 5px; flex-wrap: wrap; }
-  .mini-tag { background: #26262e; color: #a8a8f0; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
-  .card .actions { margin-top: 8px; display: flex; gap: 8px; }
-  .card button { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; font-size: 12px; padding: 4px 10px; cursor: pointer; }
-  .card button:hover { border-color: var(--accent); color: var(--text); }
-  #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: none; align-items: center; justify-content: center; z-index: 100; cursor: zoom-out; flex-direction: column; gap: 12px; }
-  #lightbox.open { display: flex; }
-  #lightbox img { max-width: 92vw; max-height: 82vh; border-radius: 8px; }
-  #lightbox .src { color: var(--muted); font-size: 13px; }
-  #lightbox .src a { color: var(--accent); }
-  dialog { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 14px; padding: 20px; width: min(420px, 90vw); }
-  dialog::backdrop { background: rgba(0,0,0,.6); }
-  dialog h3 { font-size: 15px; margin-bottom: 12px; }
-  dialog textarea, dialog input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 8px 10px; font-size: 13px; margin-bottom: 10px; }
-  dialog textarea { min-height: 70px; resize: vertical; }
-  dialog .row { display: flex; gap: 8px; justify-content: flex-end; }
-  dialog button { background: var(--accent); border: none; color: #fff; border-radius: 8px; padding: 7px 16px; font-size: 13px; cursor: pointer; }
-  dialog button.ghost { background: none; border: 1px solid var(--border); color: var(--muted); }
-  .empty { text-align: center; color: var(--muted); padding: 80px 20px; }
-</style>
+<title>Ana Wiechers · forwardnotes.com</title>
+<meta name="description" content="Ana Wiechers — designer-at-heart, collector of beautiful things.">
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<header>
-  <h1>✦ Design Inspo</h1>
-  <input id="search" placeholder="Search text, tags, authors…" autofocus>
-  <span class="count" id="count"></span>
-</header>
-<div id="tags"></div>
-<div id="grid"></div>
-<div class="empty" id="empty" style="display:none">No matches</div>
-<div id="lightbox"><img id="lb-img"><div class="src" id="lb-src"></div></div>
-<dialog id="edit">
-  <h3>Edit item</h3>
-  <input id="edit-tags" placeholder="tags, comma separated">
-  <textarea id="edit-notes" placeholder="notes — why you saved this"></textarea>
-  <div class="row"><button class="ghost" onclick="editDlg.close()">Cancel</button><button onclick="saveEdit()">Save</button></div>
-</dialog>
-<script>
-let ITEMS = [], activeTags = new Set(), q = "";
+<div class="container">
+<nav>
+  <span class="logo"><span class="star">✦</span>forwardnotes</span>
+  <a href="/" class="active">home</a>
+  <a href="/about" >about</a>
+  <a href="/notes" >notes</a>
+  <a href="/inspo/">inspo</a>
+</nav>
 
-async function load() {
-  const r = await fetch('./data.json');
-  ITEMS = await r.json();
-  const ov = getOverrides();
-  ITEMS.forEach(i => { if (ov[i.id]) { i.tags = ov[i.id].tags ?? i.tags; i.notes = ov[i.id].notes ?? i.notes; } });
-  renderTags(); render();
-}
+<h1>Hi, I'm Ana <span class="star">✦</span></h1>
+<p class="lede">Designer-at-heart and curious builder, collecting the internet's most interesting visuals and thinking out loud about what makes design good.</p>
+<div class="links">
+  <a class="btn" href="/inspo/">✦ Design Inspo →</a>
+  <a class="btn" href="/notes">Notes</a>
+  <a class="btn" href="/about">About me</a>
+</div>
 
-function allTags() {
-  const m = {};
-  ITEMS.forEach(i => i.tags.forEach(t => m[t] = (m[t]||0)+1));
-  return Object.entries(m).sort((a,b) => b[1]-a[1]);
-}
+<h2>Latest notes</h2>
+<div class="card-list">
+  <div class="note">
+    <h3><a href="/notes">Why I'm building in public</a></h3>
+    <div class="date">August 2026</div>
+    <p>On taste, curation, and why saving beautiful things isn't hoarding — it's training your eye…</p>
+  </div>
+</div>
 
-function renderTags() {
-  const el = document.getElementById('tags');
-  el.innerHTML = allTags().map(([t,n]) =>
-    `<span class="tag-chip ${activeTags.has(t)?'active':''}" onclick="toggleTag('${t.replace(/'/g,"\\\\'")}')">${t} <span style="opacity:.6">${n}</span></span>`
-  ).join('');
-}
-
-function toggleTag(t) { activeTags.has(t) ? activeTags.delete(t) : activeTags.add(t); renderTags(); render(); }
-
-function matches(i) {
-  if (activeTags.size && ![...activeTags].every(t => i.tags.includes(t))) return false;
-  if (q) {
-    const hay = (i.text + ' ' + i.tags.join(' ') + ' ' + i.handle + ' ' + i.notes).toLowerCase();
-    if (!q.toLowerCase().split(/\\s+/).every(w => hay.includes(w))) return false;
-  }
-  return true;
-}
-
-function esc(s) { const d = document.createElement('div'); d.textContent = s||''; return d.innerHTML; }
-
-function render() {
-  const grid = document.getElementById('grid');
-  const shown = ITEMS.filter(matches);
-  document.getElementById('count').textContent = shown.length + ' / ' + ITEMS.length;
-  document.getElementById('empty').style.display = shown.length ? 'none' : 'block';
-  grid.innerHTML = shown.map(i => `
-    <div class="card">
-      ${i.imgs.map((src,ix) => `<img src="${src}" loading="lazy" onclick="lb('${src}','${i.url}')" onerror="this.style.display='none'">`).join('')}
-      <div class="body">
-        <div class="meta">
-          <a class="handle" href="https://x.com/${esc(i.handle)}" target="_blank">@${esc(i.handle)}</a>
-          <span class="date">${esc(i.date)}</span>
-        </div>
-        <div class="text">${esc(i.text)}</div>
-        ${i.tags.length ? `<div class="item-tags">${i.tags.map(t=>`<span class="mini-tag">${esc(t)}</span>`).join('')}</div>` : ''}
-        ${i.notes ? `<div class="text" style="margin-top:6px;font-style:italic;color:var(--muted)">📝 ${esc(i.notes)}</div>` : ''}
-        <div class="actions">
-          <button onclick="openEdit('${i.id}')">✏️ tag/note</button>
-          <a href="${i.url}" target="_blank" style="text-decoration:none"><button>↗ source</button></a>
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-function lb(src, url) {
-  document.getElementById('lb-img').src = src;
-  document.getElementById('lb-src').innerHTML = `source: <a href="${url}" target="_blank">${url}</a>`;
-  document.getElementById('lightbox').classList.add('open');
-}
-document.getElementById('lightbox').onclick = () => document.getElementById('lightbox').classList.remove('open');
-
-let editId = null;
-function openEdit(id) {
-  editId = id;
-  const item = ITEMS.find(i => i.id === id);
-  document.getElementById('edit-tags').value = item.tags.join(', ');
-  document.getElementById('edit-notes').value = item.notes || '';
-  document.getElementById('edit').showModal();
-}
-function getOverrides() { try { return JSON.parse(localStorage.getItem('inspo_overrides')) || {}; } catch(e) { return {}; } }
-function setOverride(id, patch) {
-  const o = getOverrides(); o[id] = Object.assign(o[id]||{}, patch);
-  localStorage.setItem('inspo_overrides', JSON.stringify(o));
-}
-async function saveEdit() {
-  const tags = document.getElementById('edit-tags').value.split(',').map(s=>s.trim()).filter(Boolean);
-  const notes = document.getElementById('edit-notes').value;
-  setOverride(editId, {tags, notes});
-  // best-effort server sync when Worker is deployed; silently ignored otherwise
-  fetch('/api/update', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id: editId, tags, notes})}).catch(()=>{});
-  const item = ITEMS.find(i => i.id === editId);
-  item.tags = tags; item.notes = notes;
-  editDlg.close(); renderTags(); render();
-}
-
-document.getElementById('search').addEventListener('input', e => { q = e.target.value; render(); });
-
-load();
-</script>
+<footer>
+  <span>© 2026 Ana Wiechers</span>
+  <span><a href="https://x.com/AnaWiechers">x.com/AnaWiechers</a></span>
+</footer>
+</div>
 </body>
 </html>
