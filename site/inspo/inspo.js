@@ -155,7 +155,17 @@ function renderCases() {
   });
 }
 
-function selectCase(index, scrollToReading = false, revealSelection = false) {
+function revealCase(button, behavior = "smooth") {
+  if (!button) return;
+  const stripBounds = caseStrip.getBoundingClientRect();
+  const buttonBounds = button.getBoundingClientRect();
+  const targetLeft = caseStrip.scrollLeft
+    + (buttonBounds.left - stripBounds.left)
+    - ((caseStrip.clientWidth - button.offsetWidth) / 2);
+  caseStrip.scrollTo({ left: Math.max(0, targetLeft), behavior });
+}
+
+function selectCase(index, revealSelection = false) {
   selectedCase = (index + CASES.length) % CASES.length;
   const item = CASES[selectedCase];
 
@@ -180,10 +190,7 @@ function selectCase(index, scrollToReading = false, revealSelection = false) {
   imageCaption.textContent = `${item.short} · Working note${item.crop ? " · Cropped from source sheet" : ""}`;
 
   const selectedButton = caseStrip.querySelector(`[data-case="${selectedCase}"]`);
-  if (revealSelection) selectedButton?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-  if (scrollToReading) {
-    document.querySelector("#case-reading").scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  if (revealSelection) revealCase(selectedButton);
 }
 
 function cleanText(value = "") {
@@ -297,8 +304,10 @@ async function loadArchive() {
   renderClippings();
 }
 
-document.querySelector("#previous-case").addEventListener("click", () => selectCase(selectedCase - 1, false, true));
-document.querySelector("#next-case").addEventListener("click", () => selectCase(selectedCase + 1, false, true));
+document.querySelector("#previous-case").addEventListener("click", () => selectCase(selectedCase - 1, true));
+document.querySelector("#next-case").addEventListener("click", () => selectCase(selectedCase + 1, true));
+document.querySelector("#carousel-previous").addEventListener("click", () => selectCase(selectedCase - 1, true));
+document.querySelector("#carousel-next").addEventListener("click", () => selectCase(selectedCase + 1, true));
 document.querySelector("#archive-search").addEventListener("input", (event) => {
   query = event.target.value;
   renderClippings();
@@ -313,9 +322,51 @@ caseStrip.addEventListener("keydown", (event) => {
     : event.key === "End"
       ? CASES.length - 1
       : selectedCase + (event.key === "ArrowRight" ? 1 : -1);
-  selectCase(nextIndex, false, true);
+  selectCase(nextIndex, true);
   caseStrip.querySelector(`[data-case="${selectedCase}"]`)?.focus();
 });
+
+let dragStartX = 0;
+let dragStartScroll = 0;
+let dragMoved = false;
+let dragActive = false;
+let suppressCarouselClick = false;
+
+caseStrip.addEventListener("mousedown", (event) => {
+  if (event.button !== 0) return;
+  event.preventDefault();
+  dragStartX = event.clientX;
+  dragStartScroll = caseStrip.scrollLeft;
+  dragMoved = false;
+  dragActive = true;
+});
+
+window.addEventListener("mousemove", (event) => {
+  if (!dragActive || event.buttons !== 1) return;
+  const distance = event.clientX - dragStartX;
+  if (Math.abs(distance) > 5) {
+    dragMoved = true;
+    caseStrip.classList.add("is-dragging");
+  }
+  if (dragMoved) caseStrip.scrollLeft = dragStartScroll - distance;
+});
+
+window.addEventListener("mouseup", () => {
+  if (!dragActive) return;
+  dragActive = false;
+  caseStrip.classList.remove("is-dragging");
+  if (dragMoved) {
+    suppressCarouselClick = true;
+    requestAnimationFrame(() => { suppressCarouselClick = false; });
+  }
+  dragMoved = false;
+});
+
+caseStrip.addEventListener("click", (event) => {
+  if (!suppressCarouselClick) return;
+  event.preventDefault();
+  event.stopPropagation();
+}, true);
 
 document.querySelectorAll(".thread-link").forEach((button) => {
   button.addEventListener("click", () => {

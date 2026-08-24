@@ -67,9 +67,19 @@
             <p class="thread-thesis">A document built for disclosure can still carry a point of view. These covers turn obligation into an encounter.</p>
           </div>
 
-          <div class="case-status" aria-live="polite">
-            <span id="case-position">Case 1 of 7</span>
-            <span id="case-kind">Working observation</span>
+          <div class="case-status">
+            <div class="case-status-copy" aria-live="polite">
+              <span id="case-position">Case 1 of 7</span>
+              <span id="case-kind">Working observation</span>
+            </div>
+            <div class="carousel-controls" aria-label="Browse annual report covers">
+              <button id="carousel-previous" type="button" aria-label="Show previous cover">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5M7.5 10h7"></path></svg>
+              </button>
+              <button id="carousel-next" type="button" aria-label="Show next cover">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 4.5 5.5 5.5-5.5 5.5M12.5 10h-7"></path></svg>
+              </button>
+            </div>
           </div>
 
           <div class="case-strip" id="case-strip" role="listbox" aria-label="Annual report cases"></div>
