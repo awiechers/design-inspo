@@ -185,7 +185,7 @@ function selectCase(index, revealSelection = false) {
   document.querySelector("#source-link").href = ANNUAL_SOURCE;
   readingImage.src = item.image;
   readingImage.alt = item.alt;
-  readingImage.style.objectPosition = "top left";
+  readingImage.style.objectPosition = item.crop ? "top left" : "top center";
   document.querySelector("#image-button").classList.toggle("is-crop", Boolean(item.crop));
   imageCaption.textContent = `${item.short} · Working note${item.crop ? " · Cropped from source sheet" : ""}`;
 
